@@ -5,7 +5,7 @@ from scipy.linalg import eigh
 from functions import laplacian, distmat
 import os
 
-show_sample_plot = True # Shows a sample image from the data
+show_sample_plot = False # Shows a sample image from the data
 k = 100 # number of nearest neighbors
 
 cd = os.getcwd()
@@ -15,6 +15,7 @@ mat_data = loadmat(os.path.join(cd, 'Homework1', 'data', 'CDdata.mat'))
 
 # Extracting just the data from the dictionary
 data = mat_data['Y']
+X = data.astype(np.float64) / 255.0
 
 # Sample plot
 if show_sample_plot:
@@ -23,8 +24,7 @@ if show_sample_plot:
     plt.title(f"Sample plot of Cat and Dog Dataset (Index: {r_int})")
     plt.show()
 
-D = distmat(data)
-print(D.shape)
+D = distmat(X)
 T = np.median(D[D > 0])**2
 
 eigval, eigvec = laplacian(X = D, weighted=False, k = k, T = T)
@@ -35,8 +35,6 @@ embedding = eigvec[:, 1:3]
 
 pred_labels = np.sign(embedding[:, 0])
 ac_labels = np.repeat([1, -1], 99)
-
-print(pred_labels[50:60])
 
 acc1 = np.mean(pred_labels == ac_labels)
 acc2 = np.mean(-pred_labels == ac_labels)
@@ -50,7 +48,7 @@ plt.scatter(range(198), embedding[:,0], c = pred_labels, cmap ='bwr', label='Unw
 
 plt.xlabel('Index')
 plt.ylabel('First element of eigenvector')
-plt.title(f'First element of each index')
+plt.title(f'First element of each index Accuracy {accuracy*100:.2f} %')
 plt.legend()
 plt.grid(True)
 plt.show()

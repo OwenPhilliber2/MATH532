@@ -1,24 +1,45 @@
 import numpy as np
 from numpy import linalg as lg
 from scipy.linalg import eigh
+from scipy.spatial.distance import cdist
 
-def laplacian(X, weighted = True, k = 3, T = 5000):
+def laplacian(X, weighted = True, k = 3, T = 5000, A_mat = None, D_mat = None):
     '''
     X - Distance matrix
     weighted - Boolian whether laplacian with weighted weights or not
     '''
     n = X.shape[0]
     # Unweighted
-    A = np.zeros(X.shape)
 
+    A = np.zeros(X.shape)
     for i in range(n):
-        smallest_k = np.argsort(X[i, :])[1:k+1]
+        smallest_k = np.argsort(X[i, :])[1:k+1]  # skip self (distance 0)
         A[i, smallest_k] = 1
+
+    # Make symmetric (important!)
     A = np.maximum(A, A.T)
+    print(A)
+
     if weighted:
         # Weighted
         A = np.exp(-X ** 2 / T) * A
         
+    # Create the degree matrix
+    D = np.diag(np.sum(A, axis = 0))
+    # Create the Laplacian matrix
+    L = D - A
+    # Find the eigenvalues and eigenvectors
+    eigval, eigvec = eigh(L, D)
+    # Sort the eigenvectors
+    idx = np.argsort(eigval)
+
+    return eigval[idx], eigvec[:, idx]
+
+def laplacian_w_A_D(A, D, weighted = True, k = 3, T = 5000, A_mat = None, D_mat = None):
+    '''
+    X - Distance matrix
+    weighted - Boolian whether laplacian with weighted weights or not
+    '''
     # Create the degree matrix
     D = np.diag(np.sum(A, axis = 0))
     # Create the Laplacian matrix
@@ -49,11 +70,11 @@ def MDS(D, tol = 1e-9):
 
     # keep only positive eigenvalues
     pos = eigval > tol
-    eigval = eigval[pos]
-    eigvec = eigvec[:, pos]
+    eigval_tild = eigval[pos]
+    eigvec_tild = eigvec[:, pos]
 
     # Calculating normalized eigenvalue matrix
-    X = eigvec @ np.diag(np.sqrt(eigval))
+    X = eigvec_tild @ np.diag(np.sqrt(eigval_tild))
 
     # Question do we cut V before or after normalizing?
     return X, eigval, eigvec
