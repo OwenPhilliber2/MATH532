@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.neighbors import kneighbors_graph
 import matplotlib.pyplot as plt
 from scipy.linalg import eigh
 from functions import laplacian, MDS

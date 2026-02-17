@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.neighbors import kneighbors_graph
 import matplotlib.pyplot as plt
 from scipy.linalg import eigh
 from functions import laplacian, MDS, laplacian_w_A_D
@@ -23,10 +22,12 @@ D = np.array([[1, 0, 0, 0, 0, 0],
 [0, 0, 0, 0, 2, 0],
 [0, 0, 0, 0, 0, 2]])
 
+print(D - A)
+
 
 # Typo in 113 with the adjency matrix (has 6 and 3s)
 
-eigval, eigvec = laplacian_w_A_D(A = A, D = D, weighted=False,k = k, T = T)
+eigval, eigvec = laplacian_w_A_D(A = A, D = D, weighted=False, T = T)
 
 embedding = eigvec[:, 1:3]
 
@@ -38,7 +39,7 @@ for i, letter in enumerate(labels):
     
 plt.xlabel('Eigenvector 2')
 plt.ylabel('Eigenvector 3')
-plt.title(f'2D Laplacian Eigenmap ({k}-NN)')
+plt.title(f'2D Laplacian Eigenmap')
 plt.legend()
 plt.grid(True)
 plt.show()

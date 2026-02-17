@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.neighbors import kneighbors_graph
 import matplotlib.pyplot as plt
 from scipy.linalg import eigh
 from functions import laplacian, MDS
@@ -23,10 +22,10 @@ embeddingw = eigvecw[:, 1:3]
 
 # Plotting 
 plt.figure(figsize=(8,6))
-plt.scatter(embedding[:,0], embedding[:,1])
+plt.scatter(embedding[:,0], embedding[:,1], color='blue', label='Unweighted', s=60)
 for i, letter in enumerate(labels):
     plt.text(embedding[i,0]+offset, embedding[i,1]+offset, letter)
-plt.scatter(embeddingw[:,0], embeddingw[:,1])
+plt.scatter(embeddingw[:,0], embeddingw[:,1], color='red', label='Weighted', s=60)
 for i, letter in enumerate(labels):
     plt.text(embeddingw[i,0]+offset, embeddingw[i,1]+offset, letter)
 

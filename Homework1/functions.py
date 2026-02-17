@@ -18,6 +18,7 @@ def laplacian(X, weighted = True, k = 3, T = 5000, A_mat = None, D_mat = None):
 
     # Make symmetric (important!)
     A = np.maximum(A, A.T)
+
     print(A)
 
     if weighted:
@@ -35,7 +36,7 @@ def laplacian(X, weighted = True, k = 3, T = 5000, A_mat = None, D_mat = None):
 
     return eigval[idx], eigvec[:, idx]
 
-def laplacian_w_A_D(A, D, weighted = True, k = 3, T = 5000, A_mat = None, D_mat = None):
+def laplacian_w_A_D(A, D, weighted = True, T = 5000, A_mat = None, D_mat = None):
     '''
     X - Distance matrix
     weighted - Boolian whether laplacian with weighted weights or not
@@ -87,6 +88,27 @@ def distmat(X, method='2norm'):
         for i in range(n - 1):
             for j in range(i + 1, n):
                 D[i, j] = np.linalg.norm(X[:, i] - X[:, j])
+    elif method == 'angle':
+        for i in range(n - 1):
+            for j in range(i + 1, n):
+                x = X[:, i]
+                y = X[:, j]
+                D[i, j] = np.arccos(np.dot(x.T, y) / (np.linalg.norm(x) * np.linalg.norm(y)))
+                # Alternatively, use D(i,j) = min(j-i, n+i-j) * 2 * np.pi / 7
+    else:
+        print('Unknown distance method')
+    
+    D += D.T
+    return D
+
+def distmat_3D(X, method='2norm'):
+    n = X.shape[0]
+    D = np.zeros((n, n))
+
+    if method == '2norm':
+        for i in range(n - 1):
+            for j in range(i + 1, n):
+                D[i, j] = np.linalg.norm(X[i, :, :] - X[j, :, :])
     elif method == 'angle':
         for i in range(n - 1):
             for j in range(i + 1, n):

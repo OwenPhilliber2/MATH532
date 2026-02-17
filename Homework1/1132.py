@@ -43,12 +43,12 @@ accuracy = max(acc1, acc2)
 
 print(accuracy)
 
-# plt.scatter(embedding[:,0], embedding[:,1], c = pred_labels, cmap ='bwr', label='Unweighted', s=60)
-plt.scatter(range(198), embedding[:,0], c = pred_labels, cmap ='bwr', label='Unweighted', s=60)
+plt.scatter(embedding[:,0], embedding[:,1], c = pred_labels, cmap ='bwr', s=60)
+# plt.scatter(range(198), embedding[:,0], c = pred_labels, cmap ='bwr', label='Unweighted', s=60)
 
-plt.xlabel('Index')
-plt.ylabel('First element of eigenvector')
-plt.title(f'First element of each index Accuracy {accuracy*100:.2f} %')
+plt.xlabel('Elements of the Fiedler vector')
+plt.ylabel('Second nonzero eigenvector')
+plt.title(f'Fiedler Vector Embedding (Accuracy: {accuracy*100:.2f} %)')
 plt.legend()
 plt.grid(True)
 plt.show()
