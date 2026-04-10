@@ -25,34 +25,38 @@ angle_z = np.arccos(z)
 print(f'Correlation coefficient: {z}')
 print(f"Principal angle between cats and dogs: {angle_z}")
 
+print(dict['alpha'].shape)
+
 plt.scatter(dict["alpha"], dict["beta"], s = 5)
 plt.axline((0, 0), slope=1, color = "black")
 plt.xlabel("Alpha")
 plt.ylabel("Beta")
+plt.title("Scatterplot of Alpha and Beta")
 plt.show()
 
-cor_alpha = dict['alpha'].reshape(64,64)
-cor_beta = dict['beta'].reshape(64,64)
-rotated_cor_alpha = np.rot90(cor_alpha, k=-1)
-rotated_cor_beta = np.rot90(cor_beta, k=-1)
+cor_alpha = dict['alpha'].reshape(64,64).T
+cor_beta = dict['beta'].reshape(64,64).T
 
-plt.imshow(rotated_cor_alpha, cmap = 'grey')
-plt.title("Cannonical Correlation Matrix Alpha Reshaped")
+plt.imshow(cor_alpha, cmap = 'grey')
+plt.title("Canonical Correlation Matrix Alpha Reshaped")
 plt.show()
 
-plt.imshow(rotated_cor_beta, cmap = 'grey')
-plt.title("Cannonical Correlation Matrix Beta Reshaped")
+plt.imshow(cor_beta, cmap = 'grey')
+plt.title("Canonical Correlation Matrix Beta Reshaped")
 plt.show()
 
-gamma = rotated_cor_alpha * rotated_cor_beta
+gamma = cor_alpha * cor_beta
 plt.imshow(gamma, cmap = 'grey')
+plt.title("Gamma Canonical Correlation Matrix (Alpha * Beta)")
 plt.show()
 
 a = dict["a"]
 b = dict["b"]
 
 plt.plot(range(a.shape[0]), a)
+plt.title("Canonical Correlation Vector Alpha")
 plt.show()
 
 plt.plot(range(b.shape[0]), b)
+plt.title("Canonical Correlation Vector Beta")
 plt.show()
